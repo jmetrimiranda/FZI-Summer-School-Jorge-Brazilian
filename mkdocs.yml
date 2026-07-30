@@ -1,0 +1,56 @@
+site_name: RimA Summer School — Go2 Prep
+site_description: Guia vivo de preparação do Unitree Go2 EDU para a RimA Summer School (FZI Karlsruhe, 03–07.08.2026)
+site_url: https://jmetrimiranda.github.io/FZI-Summer-School-Jorge-Brazilian/
+repo_url: https://github.com/jmetrimiranda/FZI-Summer-School-Jorge-Brazilian
+repo_name: FZI-Summer-School-Jorge-Brazilian
+
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    - scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Modo escuro
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Modo claro
+  features:
+    - content.code.copy
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+
+nav:
+  - Início: index.md
+  - "Etapa 0 — Estratégia": 00-estrategia.md
+  - "Etapa 1 — Rede com o Go2 ✔": 01-rede-go2.md
+  - "Curso rápido — Docker ✔": 02-docker-basico.md
+  - "Etapa 3 — Containers ROS ✔": 03-containers.md
+  - "Etapa 4 — unitree_ros2 🔜": 04-unitree-ros2.md
+  - "Etapa 5 — SDK2: mover o robô 🔜": 05-sdk2.md
+  - "Etapa 6 — Sensores 🔜": 06-sensores.md
+  - "Etapa 7 — Zenoh (modo escola) 🔜": 07-zenoh.md
+  - "Etapa 8 — Internet no robô 🔜": 08-internet-robo.md
+  - "Etapa 9 — Firmware e backup 🔜": 09-firmware-backup.md
+  - "Etapa 10 — Ensaio geral e kit 🔜": 10-ensaio-kit.md
+  - Troubleshooting: troubleshooting.md
+  - Publicar este site: publicar.md
