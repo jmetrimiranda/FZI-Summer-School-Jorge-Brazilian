@@ -23,11 +23,11 @@ Cada etapa termina com um bloco **✅ Teste de aceite**: rode e compare com a sa
 | 5 — SDK2: mover o robô por código | ✔ 30/07 |
 | 6 — Sensores: LiDAR no RViz + câmera | ✔ 30/07 |
 | 7 — Zenoh (modo escola) | ✔ 30/07 |
-| 8 — Internet no robô (NAT) | 🔜 próxima |
-| 9 — Firmware OTA + backup do Jetson | 🔜 |
+| 8 — Internet no robô (NAT) | ✔ 30/07 |
+| 9 — Firmware OTA + backup do Jetson | 🔜 próxima |
 | 10 — Ensaio geral cronometrado + kit | 🔜 |
 
-**Progresso geral: ~85% — TODAS as etapas técnicas concluídas.** O notebook lê, comanda e vê o robô; o vocabulário do evento (Zenoh: router, client mode, trio sagrado) está validado. Resta a logística: NAT, firmware/backup, kit e ensaio geral.
+**Progresso geral: ~90%.** Técnica completa — e o robô com internet via NAT. Restam as duas etapas de logística: firmware/backup e kit + ensaio geral.
 
 ## Ambiente de referência
 

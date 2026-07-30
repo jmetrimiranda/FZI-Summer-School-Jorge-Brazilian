@@ -189,3 +189,12 @@ Todos os problemas abaixo **aconteceram de verdade** durante a preparação (30/
 **Causa:** confusão entre dois comandos de shell: **`export`** define *variáveis de ambiente* (`export NOME=valor`); **`source`** *executa um script* no shell atual (`source /caminho/script.bash`). Um caminho de arquivo não é um nome de variável válido — daí o erro.
 
 **Solução:** `source /opt/ros/kilted/setup.bash` (script) e `export RMW_IMPLEMENTATION=rmw_zenoh_cpp` (variável).
+
+## NAT: Jetson sem internet {#nat-jetson-sem-internet}
+
+**Checklist na ordem:**
+
+1. O Wi-Fi do **notebook** tem internet? (Conectado no roteador da casa, não numa rede-ilha.)
+2. O modo shared aplicou? `nmcli -g ipv4.method con show go2` deve responder `shared` — e depois de qualquer `mod`, precisa do `nmcli con up go2`.
+3. No **Jetson**: `ip route` mostra `default via 192.168.123.99`? Se não, refaça o `ip route replace`.
+4. `ping 8.8.8.8` funciona mas `ping google.com` falha? É DNS — refaça a linha do `resolv.conf`.

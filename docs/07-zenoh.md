@@ -88,3 +88,13 @@ echo $RMW_IMPLEMENTATION      # rmw_zenoh_cpp NESTE terminal?
 echo $ROS_DOMAIN_ID           # igual ao da outra ponta?
 ros2 topic list               # vazio? -> checklist no troubleshooting
 ```
+
+## 6. FAQ — as perguntas que ficaram depois da validação
+
+**"Zenoh só funciona em Wi-Fi?"** Não — Zenoh é **agnóstico ao meio**: roda TCP sobre qualquer rede IP (cabo, Wi-Fi, até internet). A nossa própria validação nem saiu da máquina (`127.0.0.1`). A associação com Wi-Fi existe porque *no evento* o meio será Wi-Fi; se te derem um cabo lá, o mesmo comando funciona — só muda o IP.
+
+**"Preciso converter as etapas 4–6 para Zenoh?"** Não. O **seu** Go2 fala DDS — as etapas 4–6 continuam exatamente como estão para ele. Zenoh é o idioma dos robôs **da FZI**. São dois mundos, e você agora domina os dois; a tabela do §1 mostra o contraste.
+
+**"O que exatamente eu digito de diferente na segunda-feira?"** O trio sagrado em cada terminal + o endpoint deles no lugar do `127.0.0.1` (§4). Todo o resto — `ros2 topic list/echo`, RViz, seus nós Python — é **idêntico** ao que você já usa.
+
+**"E aquela ponte para mover o MEU Go2 via Zenoh?"** Exercício opcional de intuição — nada do evento depende dele. Fica registrado como projeto pós-viagem.
