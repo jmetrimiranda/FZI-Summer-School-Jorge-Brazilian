@@ -21,13 +21,13 @@ Cada etapa termina com um bloco **✅ Teste de aceite**: rode e compare com a sa
 | 3 — Containers `casa` (Humble) e `escola` (Kilted) validados | ✔ 30/07 |
 | 4 — unitree_ros2: o robô no `ros2 topic list` do notebook | ✔ 30/07 |
 | 5 — SDK2: mover o robô por código | ✔ 30/07 |
-| 6 — Sensores: LiDAR no RViz + câmera | 🔜 próxima |
-| 7 — Zenoh (modo escola) | 🔜 |
+| 6 — Sensores: LiDAR no RViz + câmera | ✔ 30/07 |
+| 7 — Zenoh (modo escola) | 🔜 próxima |
 | 8 — Internet no robô (NAT) | 🔜 |
 | 9 — Firmware OTA + backup do Jetson | 🔜 |
 | 10 — Ensaio geral cronometrado + kit | 🔜 |
 
-**Progresso geral: ~65% do esforço técnico** — o robô já é lido E comandado pelo notebook (`ret: 0` no StandUp via SDK). Restam: sensores na tela, Zenoh, e a logística final.
+**Progresso geral: ~75% do esforço técnico** — o robô é lido, comandado, e agora *visto*: nuvem do LiDAR no RViz e câmera por dois transportes. Restam: Zenoh e a logística final.
 
 ## Ambiente de referência
 

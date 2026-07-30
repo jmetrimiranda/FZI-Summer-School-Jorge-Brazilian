@@ -47,7 +47,7 @@ nav:
   - "Etapa 3 — Containers ROS ✔": 03-containers.md
   - "Etapa 4 — unitree_ros2 ✔": 04-unitree-ros2.md
   - "Etapa 5 — SDK2: mover o robô ✔": 05-sdk2.md
-  - "Etapa 6 — Sensores 🔜": 06-sensores.md
+  - "Etapa 6 — Sensores ✔": 06-sensores.md
   - "Etapa 7 — Zenoh (modo escola) 🔜": 07-zenoh.md
   - "Etapa 8 — Internet no robô 🔜": 08-internet-robo.md
   - "Etapa 9 — Firmware e backup 🔜": 09-firmware-backup.md

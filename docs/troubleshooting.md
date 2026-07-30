@@ -148,3 +148,27 @@ Todos os problemas abaixo **aconteceram de verdade** durante a preparação (30/
 **Contexto:** foi adicionado `source /opt/ros/humble/setup.bash` ao `~/.bashrc` do container `casa`. Conveniente — todo `docker exec` já nasce com ROS — **mas** mata o truque do "shell limpo" usado para compilar o cyclonedds na [Etapa 4](04-unitree-ros2.md).
 
 **Se um dia precisar rebuildar o cyclonedds do zero:** comente essa linha (`nano ~/.bashrc` dentro do container), abra um `docker exec` novo, confirme `printenv | grep AMENT` vazio, compile, e descomente.
+
+## ModuleNotFoundError: No module named 'unitree_go' {#modulenotfound-unitree-go}
+
+**Sintoma:** um script Python com `from unitree_go.msg import ...` morre na importação.
+
+**Causa:** `unitree_go` não vem do pip nem do ROS de fábrica — é o pacote de mensagens **gerado pelo colcon** na Etapa 4, vivendo no overlay (`cyclonedds_ws/install/`). O terminal atual não carregou o overlay (o `.bashrc` do container só carrega o Humble base). Detalhe pedagógico: recriar o arquivo não muda nada — o erro está no **ambiente**, não no código.
+
+**Solução:** `source /root/rima_ws/unitree_ros2/setup.sh` (a regra permanente) e rode de novo.
+
+## Traceback BrokenPipeError depois de um grep -m1 {#broken-pipe-grep}
+
+**Sintoma:** `ros2 topic echo ... | grep -m1 algo` imprime o resultado certo **e** um traceback `BrokenPipeError: [Errno 32]`.
+
+**Causa:** é o comando funcionando. O `grep -m1` fecha o pipe assim que acha a primeira ocorrência; o `ros2 topic echo`, ao tentar continuar escrevendo, leva "broken pipe" do kernel e morre com traceback dramático. O grep matou o echo *de propósito*.
+
+**Solução:** nenhuma — leia a linha do resultado e ignore o obituário.
+
+## /frontvideostream: "Aguardando frames..." + erros serdata {#frontvideostream-mudo}
+
+**Sintoma:** o assinante rclpy nunca recebe callback e o terminal enche de `serdata.cpp: invalid data size` / `unable initialize generic sequence` repetidos.
+
+**Diagnóstico (fechado em 30/07):** os erros vêm em rajada = **cada mensagem está chegando** e sendo rejeitada na desserialização — o `videohub` publica normalmente. Sanidade que isola o problema: `/sportmodestate`, do mesmo pacote `unitree_go`, desserializa perfeitamente → pilha e build corretos; a divergência é específica do `Go2FrontVideoData`. No Jetson, `ros2 interface show` responde `Unknown package` (o Foxy embarcado é baunilha; os tipos vivem embutidos nos binários dos serviços — o `topic list -t` só funciona porque o *nome* do tipo viaja na metadata de descoberta do DDS). Aresta conhecida no ecossistema (issue #102 do unitree_sdk2_python relata o mesmo quadro).
+
+**Solução:** usar os caminhos que funcionam — `VideoClient.GetImageSample()` (validado, 1080p) ou o stream GStreamer. Estudo de caso completo na [Etapa 6](06-sensores.md).
