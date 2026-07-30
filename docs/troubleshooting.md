@@ -105,3 +105,29 @@ Todos os problemas abaixo **aconteceram de verdade** durante a preparação (30/
 **Causa:** o `xhost +local:docker` vale **por sessão** — reboot/relogin apaga a permissão.
 
 **Solução:** rode `xhost +local:docker` no host de novo. Está no checklist de início de sessão por isso.
+
+## Adaptador sumiu do nmcli device status {#adaptador-sumiu}
+
+**Sintoma:** a interface `enx...` não aparece na lista — nem como `disconnected`. (E o `nmcli device status` é justamente o primeiro comando do diagnóstico de rede.)
+
+**Causa:** o adaptador USB-C foi desplugado (ou mal encaixado) — para o sistema, a placa deixou de existir.
+
+**Solução:** replugar adaptador e cabo; aguardar a linha `enx... ethernet connected go2` voltar (o perfil reativa sozinho); confirmar com os pings em `.161` e `.18`. Lembre: ao replugar, o nome/MAC pode mudar — irrelevante para nós, pois o perfil não é amarrado ao nome e o `setup.sh` acha a interface pelo IP.
+
+## topic list vazio com CycloneDDS {#topic-list-vazio-cyclone}
+
+**Sintoma:** dentro do container `casa`, `ros2 topic list` não mostra os tópicos do robô.
+
+**Checklist na ordem:**
+
+1. `source /root/rima_ws/unitree_ros2/setup.sh` foi rodado **neste** terminal? A linha `IF_ROBO=` imprimiu um nome real?
+2. No **host**: `nmcli device status` mostra a conexão `go2` ativa? Os pings em `.161`/`.18` respondem?
+3. Cache do daemon: `ros2 daemon stop` e repita `ros2 topic list` (ele renasce sozinho).
+
+## IF_ROBO vazio no setup.sh {#if-robo-vazio}
+
+**Sintoma:** o `setup.sh` imprime o AVISO e `IF_ROBO=` sem nada.
+
+**Causa:** nenhuma interface carrega o IP `192.168.123.99` — a conexão `go2` não está de pé no host (adaptador fora, cabo solto, ou perfil down).
+
+**Solução:** no host, `nmcli con up go2` (replugando antes, se preciso) e re-rode o `source` no container.

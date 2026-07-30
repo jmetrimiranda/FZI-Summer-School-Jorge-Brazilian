@@ -45,7 +45,7 @@ nav:
   - "Etapa 1 — Rede com o Go2 ✔": 01-rede-go2.md
   - "Curso rápido — Docker ✔": 02-docker-basico.md
   - "Etapa 3 — Containers ROS ✔": 03-containers.md
-  - "Etapa 4 — unitree_ros2 🔜": 04-unitree-ros2.md
+  - "Etapa 4 — unitree_ros2 ✔": 04-unitree-ros2.md
   - "Etapa 5 — SDK2: mover o robô 🔜": 05-sdk2.md
   - "Etapa 6 — Sensores 🔜": 06-sensores.md
   - "Etapa 7 — Zenoh (modo escola) 🔜": 07-zenoh.md

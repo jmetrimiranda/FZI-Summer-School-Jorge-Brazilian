@@ -87,3 +87,32 @@ docker pull osrf/ros:humble-desktop
 ??? failure "Deu errado?"
     - `permission denied ... docker.sock` → [grupo não carregou na sessão](troubleshooting.md#docker-permission-denied)
     - `newgrp: command not found` → [pegadinha do 26.04](troubleshooting.md#newgrp-not-found)
+
+## Usando a imagem que o evento fornecer {#imagem-do-evento}
+
+No dia, a FZI vai entregar uma imagem própria para falar com os robôs deles. **O padrão que você já domina não muda — muda só o nome no final.** Há dois formatos possíveis de entrega:
+
+**Formato A — registro (Docker Hub ou registry deles):** eles passam um nome, tipo `fzi/rima-summer-school:latest`:
+
+```bash
+docker pull NOME_DA_IMAGEM_DELES
+docker run -it --net=host --ipc=host --privileged \
+  -e DISPLAY -e QT_X11_NO_MITSHM=1 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -v ~/rima_ws:/root/rima_ws \
+  --name fzi NOME_DA_IMAGEM_DELES
+```
+
+**Formato B — arquivo (pendrive/rede local, comum em eventos):** eles passam um `.tar`:
+
+```bash
+docker load -i imagem-da-fzi.tar
+docker images            # descubra aqui o nome que ela ganhou
+docker run ... --name fzi NOME_QUE_APARECEU
+```
+
+!!! success "✅ Teste de aceite"
+    `docker images` listando a imagem deles, e o `docker run` te deixando num prompt `root@...` dentro dela.
+
+!!! tip "Se a FZI der um comando `docker run` próprio, use o deles"
+    A imagem deles pode esperar flags específicas. O que você leva desta página é a fluência para **entender** o comando que te passarem — e completá-lo (ex.: adicionar a ponte X11) se faltar algo.
