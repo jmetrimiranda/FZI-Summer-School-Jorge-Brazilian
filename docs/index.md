@@ -20,14 +20,14 @@ Cada etapa termina com um bloco **✅ Teste de aceite**: rode e compare com a sa
 | 2 — Docker instalado + imagens | ✔ 30/07 |
 | 3 — Containers `casa` (Humble) e `escola` (Kilted) validados | ✔ 30/07 |
 | 4 — unitree_ros2: o robô no `ros2 topic list` do notebook | ✔ 30/07 |
-| 5 — SDK2: mover o robô por código | 🔜 próxima |
-| 6 — Sensores: LiDAR no RViz + câmera | 🔜 |
+| 5 — SDK2: mover o robô por código | ✔ 30/07 |
+| 6 — Sensores: LiDAR no RViz + câmera | 🔜 próxima |
 | 7 — Zenoh (modo escola) | 🔜 |
 | 8 — Internet no robô (NAT) | 🔜 |
 | 9 — Firmware OTA + backup do Jetson | 🔜 |
 | 10 — Ensaio geral cronometrado + kit | 🔜 |
 
-**Progresso geral: ~55% do esforço técnico** — infraestrutura completa e o robô já sendo lido pelo notebook a 15.3 Hz; o que resta (mover, sensores, Zenoh, logística) reaproveita tudo que já foi construído.
+**Progresso geral: ~65% do esforço técnico** — o robô já é lido E comandado pelo notebook (`ret: 0` no StandUp via SDK). Restam: sensores na tela, Zenoh, e a logística final.
 
 ## Ambiente de referência
 

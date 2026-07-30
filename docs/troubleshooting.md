@@ -131,3 +131,20 @@ Todos os problemas abaixo **aconteceram de verdade** durante a preparação (30/
 **Causa:** nenhuma interface carrega o IP `192.168.123.99` — a conexão `go2` não está de pé no host (adaptador fora, cabo solto, ou perfil down).
 
 **Solução:** no host, `nmcli con up go2` (replugando antes, se preciso) e re-rode o `source` no container.
+
+## SportClient devolve ret diferente de 0 {#ret-nao-zero}
+
+**Sintoma:** `StandUp ret: 3xxx` (ou outro número ≠ 0) e/ou o robô não se mexe.
+
+**Causas prováveis, na ordem de checagem:**
+
+1. **Rede/descoberta:** o teste de leitura (`leitura_estado.py`) ainda imprime dados? Se não, o problema é rede ([checklist](troubleshooting.md#topic-list-vazio-cyclone)), não a API.
+2. **Timeout:** demorou exatamente o valor do `SetTimeout` para falhar? O serviço não respondeu — robô ocupado ou interface errada no `ChannelFactoryInitialize`.
+3. **Modo de operação:** o robô pode estar num modo que recusa o comando (ex.: deitado demais para `StandUp` direto → tente `RecoveryStand()`; ou o modo de movimento atual — o serviço `motion_switcher`, visível nos tópicos `/api/motion_switcher/*`, gerencia isso).
+4. Não repita em loop cego: anote o número do ret, o estado físico do robô, e investigue.
+
+## O .bashrc do container agora carrega o ROS sozinho {#bashrc-ros-automatico}
+
+**Contexto:** foi adicionado `source /opt/ros/humble/setup.bash` ao `~/.bashrc` do container `casa`. Conveniente — todo `docker exec` já nasce com ROS — **mas** mata o truque do "shell limpo" usado para compilar o cyclonedds na [Etapa 4](04-unitree-ros2.md).
+
+**Se um dia precisar rebuildar o cyclonedds do zero:** comente essa linha (`nano ~/.bashrc` dentro do container), abra um `docker exec` novo, confirme `printenv | grep AMENT` vazio, compile, e descomente.
