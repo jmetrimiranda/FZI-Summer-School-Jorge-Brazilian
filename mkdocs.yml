@@ -52,5 +52,9 @@ nav:
   - "Etapa 8 — Internet no robô ✔": 08-internet-robo.md
   - "Etapa 9 — Firmware e backup 🔜": 09-firmware-backup.md
   - "Etapa 10 — Ensaio geral e kit 🔜": 10-ensaio-kit.md
+  - "Guia de Chegada — Dia D": guia-chegada.md
+  - "Estudo — Nav2 essencial": estudo-nav2.md
+  - "Estudo — Flashcards (Anki)": flashcards.md
+  - "Apêndice — Ponte sem fio (pós-viagem) ⏸": apendice-ponte.md
   - Troubleshooting: troubleshooting.md
   - Publicar este site: publicar.md

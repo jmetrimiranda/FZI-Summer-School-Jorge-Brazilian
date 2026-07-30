@@ -26,8 +26,15 @@ Cada etapa termina com um bloco **✅ Teste de aceite**: rode e compare com a sa
 | 8 — Internet no robô (NAT) | ✔ 30/07 |
 | 9 — Firmware OTA + backup do Jetson | 🔜 próxima |
 | 10 — Ensaio geral cronometrado + kit | 🔜 |
+| Apêndice — ponte sem fio via Zenoh | ⏸ estacionada 30/07 (pós-viagem) |
 
 **Progresso geral: ~90%.** Técnica completa — e o robô com internet via NAT. Restam as duas etapas de logística: firmware/backup e kit + ensaio geral.
+
+## Chegada e estudo
+
+- **[Guia de Chegada — o Dia D](guia-chegada.md)** — o que deste site você vai consultar LÁ, na ordem dos acontecimentos.
+- **[Nav2 essencial](estudo-nav2.md)** — a teoria (6 peças + behavior trees) e a prática (`BasicNavigator`) para acompanhar as aulas.
+- **[Flashcards Anki](flashcards.md)** — 58 cartões por tópico, incluindo modo "digite o comando".
 
 ## Ambiente de referência
 
