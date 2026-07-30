@@ -1,0 +1,58 @@
+Go2: IP da <b>controladora</b>?	<code>192.168.123.161</code>	rede
+Go2 EDU: IP do <b>Jetson</b> (dock)?	<code>192.168.123.18</code>	rede
+Convenção: IP do <b>notebook</b> na rede do Go2?	<code>192.168.123.99/24</code>	rede
+Digite: criar o perfil de rede <code>go2</code> SEM amarrar ao nome da interface	<pre><code>nmcli con add type ethernet con-name go2 ipv4.method manual ipv4.addresses 192.168.123.99/24</code></pre>	rede digitar
+Digite: ativar o perfil go2	<pre><code>nmcli con up go2</code></pre>	rede digitar
+Digite: descobrir a interface do robô dinamicamente (pelo IP .99)	<pre><code>IF_ROBO=$(ip -4 -o addr show | awk '/192.168.123.99/{print $2}')</code></pre>	rede digitar
+Digite: SSH no Jetson do Go2 (e qual a senha?)	<pre><code>ssh unitree@192.168.123.18</code></pre>senha: <code>123</code>	rede digitar
+No evento: o que fazer ANTES de plugar o notebook numa tomada de rede com DHCP?	<pre><code>nmcli con down go2</code></pre>(o perfil captura qualquer ethernet e forçaria o IP fixo .99)	rede diad
+Por que o perfil go2 não é amarrado ao nome da interface?	O adaptador USB-C gera <b>MAC novo a cada replug</b> — e o Linux nomeia a placa pelo MAC (<code>enx…</code>). Amarrar ao nome quebraria no replug seguinte.	rede teoria
+A FZI publicou a imagem <code>fzi/rima-summer-school:latest</code>. Digite o comando para baixá-la:	<pre><code>docker pull fzi/rima-summer-school:latest</code></pre>	docker digitar diad
+A FZI entregou a imagem num arquivo <code>imagem.tar</code>. Digite: carregar + descobrir o nome dela	<pre><code>docker load -i imagem.tar<br>docker images</code></pre>	docker digitar diad
+Digite: retomar um container parado chamado <code>casa</code> (interativo)	<pre><code>docker start -ai casa</code></pre>	docker digitar
+Digite: abrir um SEGUNDO terminal no container <code>casa</code> (já rodando)	<pre><code>docker exec -it casa bash</code></pre>	docker digitar
+Digite: liberar a GUI (RViz) para containers — 1x por sessão	<pre><code>xhost +local:docker</code></pre>	docker digitar
+Para que serve <code>--net=host</code> no docker run?	O container usa as <b>interfaces reais do host</b> — sem isso ele vive na bridge isolada e não enxerga o robô nem faz descoberta DDS/Zenoh.	docker teoria
+<code>docker run</code> deu: <i>Conflict. The container name is already in use</i>. O que isso significa e o que fazer?	O container <b>já existe</b> (run CRIA). Use <code>docker start -ai NOME</code> / <code>docker exec -it NOME bash</code> — ou <code>docker rm NOME</code> se quiser recriar.	docker teoria
+O que significa um container <code>Exited (127)</code>?	O último comando dentro dele <b>não existia</b> (127 = command not found). Inofensivo — <code>docker start</code> e siga.	docker teoria
+Regra do prompt: <code>jorgemetri@…$</code> vs <code>root@…#</code> — onde vive cada comando?	<code>jorgemetri@</code> = <b>host</b> → comandos <code>docker …</code><br><code>root@</code> = <b>dentro do container</b> → <code>source</code> e <code>ros2 …</code>	docker teoria
+Nosso docker run padrão: quais as 4 ideias das flags? (-it, --net=host, -e DISPLAY + volume X11, -v ~/rima_ws)	terminal interativo; rede do host (DDS/Zenoh); ponte gráfica p/ RViz (com QT_X11_NO_MITSHM=1); workspace persistente fora do container.	docker teoria
+Digite: listar tópicos ROS 2	<pre><code>ros2 topic list</code></pre>	ros2 digitar
+Digite: ver um tópico SEM os arrays gigantes (ex.: /sportmodestate)	<pre><code>ros2 topic echo /sportmodestate --no-arr</code></pre>	ros2 digitar
+Digite: medir a taxa de um tópico (ex.: /utlidar/cloud)	<pre><code>ros2 topic hz /utlidar/cloud</code></pre>	ros2 digitar
+Digite: listar os executáveis de um pacote (ex.: demo_nodes_cpp)	<pre><code>ros2 pkg executables demo_nodes_cpp</code></pre>	ros2 digitar
+No Go2: <code>ros2 node list</code> vazio mas <code>topic list</code> cheio — por quê?	Os serviços Unitree são participantes <b>DDS puros</b>: publicam nos tópicos sem entrar no grafo de nós ROS. A verdade está nos tópicos.	ros2 teoria
+<code>ros2 topic list</code> suspeito de cache velho — qual comando reseta?	<pre><code>ros2 daemon stop</code></pre>(ele renasce sozinho no próximo comando)	ros2 digitar
+Qual a regra permanente antes de falar com o SEU Go2 via ROS num terminal novo?	<pre><code>source /root/rima_ws/unitree_ros2/setup.sh</code></pre>(carrega Humble + overlay unitree + RMW cyclone + interface dinâmica)	ros2 casa
+Build do unitree_ros2: qual a ordem crítica?	Compilar o <b>cyclonedds</b> num shell SEM ROS carregado (<code>docker exec</code> limpo) → só depois <code>source</code> do Humble → <code>colcon build</code> do resto.	ros2 casa teoria
+SDK sport: api_id de <b>StandUp</b>?	<code>1004</code>	sdk
+SDK sport: api_id de <b>StandDown</b>?	<code>1005</code>	sdk
+SDK sport: api_id de <b>Damp</b> (relaxar motores)?	<code>1001</code>	sdk
+SDK sport: api_id de <b>Move</b> (velocidade)?	<code>1008</code>	sdk
+Em que tópico DDS o SportClient publica os pedidos? E o de resposta?	<code>rt/api/sport/request</code> → <code>rt/api/sport/response</code> (casados por id único; <b>ret 0 = sucesso</b>)	sdk
+Tópico de telemetria de estado do Go2 (e taxa aproximada)?	<code>rt/sportmodestate</code> (~100 Hz) — no ROS aparece como <code>/sportmodestate</code>	sdk
+Padrão seguro do Move(): quais as 3 regras?	1) o comando vale por um curto intervalo (<b>watchdog</b>: programa morre → robô para); 2) andar contínuo = <b>reenviar a ~10 Hz</b>; 3) <code>StopMove()</code> num <code>finally</code>, sempre.	sdk teoria
+Caminho programático da câmera que FUNCIONA (e a resolução)?	<code>VideoClient.GetImageSample()</code> — request/response em <code>rt/api/videohub</code>; devolve JPEG <b>1920×1080</b>. (Assinar /frontvideostream via rclpy: aresta conhecida.)	sdk video
+Digite o TRIO SAGRADO de todo terminal Zenoh (3 linhas: source + 2 exports; DOMAIN=42 de exemplo)	<pre><code>source /opt/ros/kilted/setup.bash<br>export RMW_IMPLEMENTATION=rmw_zenoh_cpp<br>export ROS_DOMAIN_ID=42</code></pre>	zenoh digitar diad
+Digite: subir o router Zenoh	<pre><code>ros2 run rmw_zenoh_cpp rmw_zenohd</code></pre>	zenoh digitar
+Digite: conferir se o router Zenoh está vivo	<pre><code>pgrep -af rmw_zenohd</code></pre>	zenoh digitar
+Digite: rodar um listener em MODO CLIENT direto no router 10.0.0.5	<pre><code>ZENOH_CONFIG_OVERRIDE='mode="client";connect/endpoints=["tcp/10.0.0.5:7447"]' ros2 run demo_nodes_cpp listener</code></pre>	zenoh digitar diad
+Digite: subir SEU router ponteado no router remoto 10.0.0.5 (forma A do evento)	<pre><code>ZENOH_CONFIG_OVERRIDE='connect/endpoints=["tcp/10.0.0.5:7447"]' ros2 run rmw_zenoh_cpp rmw_zenohd</code></pre>	zenoh digitar diad
+Porta padrão do Zenoh?	<code>7447</code>	zenoh
+As DUAS perguntas de ouro pra organização (em inglês)?	1) <i>What is the Zenoh router endpoint we should connect to?</i><br>2) <i>Which ROS_DOMAIN_ID are we using?</i>	zenoh diad
+DDS vs Zenoh: a diferença de DESCOBERTA em uma frase cada	DDS: automática por <b>multicast</b> na rede local (todo mundo se acha sozinho). Zenoh: <b>nada se descobre sozinho</b> — nós conectam explicitamente a um <b>router</b> via TCP.	zenoh teoria
+Zenoh: <code>topic list</code> vazio — suspeito nº 1? (e nº 2)	1) <b>esqueceu o export</b> <code>RMW_IMPLEMENTATION</code> NESTE terminal; 2) router morto (<code>pgrep -af rmw_zenohd</code>).	zenoh teoria
+Zenoh funciona só em Wi-Fi?	Não — é <b>agnóstico ao meio</b>: TCP sobre qualquer rede IP (cabo, Wi-Fi, internet). A validação em casa rodou em 127.0.0.1.	zenoh teoria
+pip: pacote EXISTE mas tenta compilar do fonte e explode. Qual flag salva (e o que ela faz)?	<pre><code>pip install --only-binary=:all: PACOTE</code></pre>Proíbe fonte e deixa o pip <b>descer de versão</b> até uma wheel compatível (caso real: eclipse-zenoh 1.9.0→1.5.1 no Jetson).	pip digitar
+pip: <i>from versions: none</i> com lista VAZIA — diagnóstico?	O nome <b>não está no PyPI</b> (ex.: unitree_sdk2py vive no GitHub) → <code>git clone</code> + <code>pip install -e .</code> (com <code>--no-deps</code> se as deps não interessam).	pip teoria
+pip: <i>Cannot uninstall X … installed by debian</i> — qual flag?	<pre><code>pip install --ignore-installed PACOTE</code></pre>(em Ubuntu 23+: junto com <code>--break-system-packages</code>)	pip digitar
+Nav2: as 6 peças do mapa mental?	1 Mapa · 2 Localização (AMCL/SLAM) · 3 Costmaps global+local (inflação) · 4 Planner (caminho global) · 5 Controller (segue localmente) · 6 Behaviors/recoveries — regidos pelo <b>BT Navigator</b>.	nav2 teoria
+Nav2: o que é a INFLAÇÃO do costmap?	A auréola de custo ao redor dos obstáculos — o "medo" que faz o planejador passar com folga em vez de raspar a parede.	nav2 teoria
+Behavior tree: Sequência (→) vs Fallback (?)	<b>Sequência</b>: filhos em ordem, falha se UM falhar ("planeje E siga"). <b>Fallback</b>: tenta o próximo QUANDO um falha ("siga; senão recupere").	nav2 teoria
+Nav2: qual a action para mandar o robô a um destino, e o que vai no goal?	<code>nav2_msgs/action/NavigateToPose</code> — goal = <code>PoseStamped</code> no frame <code>map</code> (posição + orientação).	nav2
+Nav2 em Python: classe amigável e as 3 chamadas centrais?	<code>BasicNavigator</code> (nav2_simple_commander): <code>waitUntilNav2Active()</code> → <code>goToPose(goal)</code> → laço <code>isTaskComplete()/getFeedback()</code> e <code>getResult()</code>.	nav2
+Digite: ver a definição da action de navegação	<pre><code>ros2 interface show nav2_msgs/action/NavigateToPose</code></pre>	nav2 digitar
+RViz + Nav2: como se manda um destino com o mouse?	Botão <b>Nav2 Goal</b> (2D Goal Pose): clica no destino e <b>arrasta</b> para definir a orientação final.	nav2
+Dia D: as 2 primeiras coisas ao chegar na FZI?	1) Assinar o <b>guest agreement</b> (documento em mãos); 2) Conectar no <b>Wi-Fi</b> (eduroam/convidados).	diad
+Dia D: a ordem de conexão aos robôs deles (5 passos)?	Container deles → 2 perguntas de ouro → trio sagrado em cada terminal → conectar (router ponteado OU client mode no endpoint) → aceite: <code>ros2 topic list</code> com os tópicos deles.	diad
+Dia D: vai abrir RViz — o que roda no host antes?	<pre><code>xhost +local:docker</code></pre>	diad digitar

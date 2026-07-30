@@ -1,0 +1,1263 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Guia vivo de preparação do Unitree Go2 EDU para a RimA Summer School (FZI Karlsruhe, 03–07.08.2026)">
+      
+      
+      
+        <link rel="canonical" href="https://jmetrimiranda.github.io/FZI-Summer-School-Jorge-Brazilian/05-sdk2/">
+      
+      
+        <link rel="prev" href="../04-unitree-ros2/">
+      
+      
+        <link rel="next" href="../06-sensores/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Etapa 5 — SDK2: mover o robô ✔ - RimA Summer School — Go2 Prep</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#etapa-5-sdk2-mover-o-robo-por-codigo" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="RimA Summer School — Go2 Prep" class="md-header__button md-logo" aria-label="RimA Summer School — Go2 Prep" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RimA Summer School — Go2 Prep
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Etapa 5 — SDK2: mover o robô ✔
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jmetrimiranda/FZI-Summer-School-Jorge-Brazilian" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    FZI-Summer-School-Jorge-Brazilian
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="RimA Summer School — Go2 Prep" class="md-nav__button md-logo" aria-label="RimA Summer School — Go2 Prep" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    RimA Summer School — Go2 Prep
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jmetrimiranda/FZI-Summer-School-Jorge-Brazilian" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    FZI-Summer-School-Jorge-Brazilian
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-estrategia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 0 — Estratégia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-rede-go2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 1 — Rede com o Go2 ✔
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-docker-basico/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Curso rápido — Docker ✔
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 3 — Containers ROS ✔
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-unitree-ros2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 4 — unitree_ros2 ✔
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 5 — SDK2: mover o robô ✔
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 5 — SDK2: mover o robô ✔
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-instalacao-validada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Instalação (validada)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-os-dois-padroes-de-conversa-do-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Os dois padrões de conversa do SDK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Os dois padrões de conversa do SDK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#padrao-a-pubsub-ler-o-robo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão A — pub/sub (ler o robô)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-b-requestresponse-comandar-o-robo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão B — request/response (comandar o robô)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-o-script-validado-posturas-discretas-o-degrau-seguro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. O script validado (posturas discretas — o degrau seguro)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-proximo-degrau-move-velocidade-continua-com-respeito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Próximo degrau: Move() — velocidade contínua, com respeito
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-o-mapa-completo-ate-onde-vai-este-nivel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. O mapa completo (até onde vai este nível)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-sensores/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 6 — Sensores ✔
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-zenoh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 7 — Zenoh (modo escola) ✔
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-internet-robo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 8 — Internet no robô ✔
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-firmware-backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 9 — Firmware e backup 🔜
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ensaio-kit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Etapa 10 — Ensaio geral e kit 🔜
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guia-chegada/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guia de Chegada — Dia D
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../estudo-nav2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estudo — Nav2 essencial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flashcards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estudo — Flashcards (Anki)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apendice-ponte.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apêndice — Ponte sem fio (pós-viagem) ⏸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publicar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publicar este site
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-instalacao-validada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Instalação (validada)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-os-dois-padroes-de-conversa-do-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Os dois padrões de conversa do SDK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Os dois padrões de conversa do SDK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#padrao-a-pubsub-ler-o-robo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão A — pub/sub (ler o robô)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-b-requestresponse-comandar-o-robo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão B — request/response (comandar o robô)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-o-script-validado-posturas-discretas-o-degrau-seguro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. O script validado (posturas discretas — o degrau seguro)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-proximo-degrau-move-velocidade-continua-com-respeito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Próximo degrau: Move() — velocidade contínua, com respeito
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-o-mapa-completo-ate-onde-vai-este-nivel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. O mapa completo (até onde vai este nível)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="etapa-5-sdk2-mover-o-robo-por-codigo">Etapa 5 — SDK2: mover o robô por código ✔<a class="headerlink" href="#etapa-5-sdk2-mover-o-robo-por-codigo" title="Permanent link">&para;</a></h1>
+<p><em>Validada em 30/07 — <code>StandDown</code>, <code>StandUp</code> e <code>BalanceStand</code> executados com <code>ret: 0</code> e o robô obedecendo fisicamente.</em></p>
+<div class="admonition info">
+<p class="admonition-title">A arquitetura em uma linha</p>
+<p><div class="highlight"><pre><span></span><code>seu script Python → SportClient → DDS: rt/api/sport/request → serviço &quot;sport&quot; no robô → controlador de locomoção → motores
+                              ← DDS: rt/api/sport/response (ret: 0 = sucesso)
+</code></pre></div>
+<strong>Nada disso é ROS.</strong> O <code>unitree_sdk2py</code> fala DDS puro (CycloneDDS 0.10.2) com serviços embarcados no robô — os mesmos tópicos <code>/api/...</code> que vimos na <a href="../01-rede-go2/#3-reconhecimento-do-jetson-o-que-existe-la-dentro">lista do Jetson</a>.</p>
+</div>
+<h2 id="1-instalacao-validada">1. Instalação (validada)<a class="headerlink" href="#1-instalacao-validada" title="Permanent link">&para;</a></h2>
+<p>No container <code>casa</code>:</p>
+<div class="highlight"><pre><span></span><code>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-pip
+<span class="nb">cd</span><span class="w"> </span>/root/rima_ws
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/unitreerobotics/unitree_sdk2_python
+<span class="nb">cd</span><span class="w"> </span>unitree_sdk2_python
+pip3<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</code></pre></div>
+<div class="admonition success">
+<p class="admonition-title">✅ Teste de aceite</p>
+<p><code>Successfully installed ... cyclonedds-0.10.2 ... unitree-sdk2py-1.0.1</code>. Repare: o pip baixou o <code>cyclonedds</code> como <strong>wheel pronto</strong> do PyPI — não precisou compilar nada.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Carta na manga (se o wheel não existir, ex.: outra arquitetura)</p>
+<p>Já temos o cyclonedds 0.10.x compilado da <a href="../04-unitree-ros2/">Etapa 4</a>: <code>export CYCLONEDDS_HOME=/root/rima_ws/unitree_ros2/cyclonedds_ws/install/cyclonedds</code> e repita o <code>pip3 install -e .</code>.</p>
+</div>
+<h2 id="2-os-dois-padroes-de-conversa-do-sdk">2. Os dois padrões de conversa do SDK<a class="headerlink" href="#2-os-dois-padroes-de-conversa-do-sdk" title="Permanent link">&para;</a></h2>
+<h3 id="padrao-a-pubsub-ler-o-robo">Padrão A — pub/sub (ler o robô)<a class="headerlink" href="#padrao-a-pubsub-ler-o-robo" title="Permanent link">&para;</a></h3>
+<p>O robô <strong>publica</strong> estado continuamente; você <strong>assina</strong> e recebe via callback. Script validado:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span><span class="o">,</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">unitree_sdk2py.core.channel</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelSubscriber</span><span class="p">,</span> <span class="n">ChannelFactoryInitialize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">unitree_sdk2py.idl.unitree_go.msg.dds_</span><span class="w"> </span><span class="kn">import</span> <span class="n">SportModeState_</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">cb</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="n">SportModeState_</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;body_height=</span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">body_height</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  mode=</span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2">  yaw_speed=</span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">yaw_speed</span><span class="si">:</span><span class="s2">+.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">ChannelFactoryInitialize</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>   <span class="c1"># domínio DDS 0 + SUA interface</span>
+    <span class="n">sub</span> <span class="o">=</span> <span class="n">ChannelSubscriber</span><span class="p">(</span><span class="s2">&quot;rt/sportmodestate&quot;</span><span class="p">,</span> <span class="n">SportModeState_</span><span class="p">)</span>
+    <span class="n">sub</span><span class="o">.</span><span class="n">Init</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>                           <span class="c1"># callback + fila de 10 msgs</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>                              <span class="c1"># segura o processo vivo</span>
+</code></pre></div>
+<p>Linha a linha: <code>ChannelFactoryInitialize(0, iface)</code> cria o participante DDS amarrado à interface do robô (por isso passamos <code>$IF_ROBO</code>); <code>ChannelSubscriber</code> assina o tópico DDS <strong>cru</strong> <code>rt/sportmodestate</code> — que é o mesmo <code>/sportmodestate</code> do ROS, visto sem o "tradutor" (o prefixo <code>rt/</code> é a convenção que o ROS 2 usa por baixo). Observação medida ao vivo: esse tópico publica a <strong>~100 Hz</strong> (centenas de callbacks em 5 s), contra ~15 Hz do LiDAR — estado é barato, sensor pesado é caro.</p>
+<h3 id="padrao-b-requestresponse-comandar-o-robo">Padrão B — request/response (comandar o robô)<a class="headerlink" href="#padrao-b-requestresponse-comandar-o-robo" title="Permanent link">&para;</a></h3>
+<p>Cada ação de alto nível é uma <strong>chamada RPC transportada por DDS</strong>. Quando você chama <code>sc.StandUp()</code>, o <code>SportClient</code>:</p>
+<ol>
+<li>Monta uma mensagem <code>Request</code> com um <strong><code>api_id</code></strong> (o número da ação) e os argumentos serializados como <strong>string JSON</strong> no campo <code>parameter</code>;</li>
+<li>Publica em <code>rt/api/sport/request</code>;</li>
+<li>Espera a resposta em <code>rt/api/sport/response</code> (até o <code>SetTimeout</code>);</li>
+<li>Devolve o código: <strong><code>ret: 0</code> = aceito/executado</strong>; ≠ 0 = erro (<a href="../troubleshooting/#ret-nao-zero">o que fazer</a>).</li>
+</ol>
+<p>Os <code>api_id</code> das ações principais (confirme a lista completa no seu clone — comando abaixo):</p>
+<table>
+<thead>
+<tr>
+<th>api_id</th>
+<th>Método</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td><code>Damp()</code></td>
+<td>Amortece: motores relaxam (robô "desliga a força" com cuidado)</td>
+</tr>
+<tr>
+<td>1002</td>
+<td><code>BalanceStand()</code></td>
+<td>Em pé com equilíbrio ativo</td>
+</tr>
+<tr>
+<td>1003</td>
+<td><code>StopMove()</code></td>
+<td>Para qualquer movimento</td>
+</tr>
+<tr>
+<td>1004</td>
+<td><code>StandUp()</code></td>
+<td>Levanta (postura rígida)</td>
+</tr>
+<tr>
+<td>1005</td>
+<td><code>StandDown()</code></td>
+<td>Deita</td>
+</tr>
+<tr>
+<td>1006</td>
+<td><code>RecoveryStand()</code></td>
+<td>Recuperação: levanta até de posições ruins</td>
+</tr>
+<tr>
+<td>1007</td>
+<td><code>Euler(r,p,y)</code></td>
+<td>Inclina o corpo (roll/pitch/yaw) parado</td>
+</tr>
+<tr>
+<td>1008</td>
+<td><code>Move(vx,vy,vyaw)</code></td>
+<td><strong>Velocidade contínua</strong> — ver seção abaixo</td>
+</tr>
+<tr>
+<td>1009 / 1010</td>
+<td><code>Sit()</code> / <code>RiseSit()</code></td>
+<td>Senta / levanta do senta</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;API_ID&quot;</span><span class="w"> </span>/root/rima_ws/unitree_sdk2_python/unitree_sdk2py/go2/sport/sport_api.py
+</code></pre></div>
+<h2 id="3-o-script-validado-posturas-discretas-o-degrau-seguro">3. O script validado (posturas discretas — o degrau seguro)<a class="headerlink" href="#3-o-script-validado-posturas-discretas-o-degrau-seguro" title="Permanent link">&para;</a></h2>
+<p>Desenhado para o pior caso de um Ctrl+C ser um robô <strong>parado</strong> (nunca um robô fugindo), com ENTER entre cada ação:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">unitree_sdk2py.core.channel</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelFactoryInitialize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">unitree_sdk2py.go2.sport.sport_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SportClient</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">ChannelFactoryInitialize</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">sc</span> <span class="o">=</span> <span class="n">SportClient</span><span class="p">()</span>
+    <span class="n">sc</span><span class="o">.</span><span class="n">SetTimeout</span><span class="p">(</span><span class="mf">10.0</span><span class="p">)</span>   <span class="c1"># quanto esperar pela response antes de erro</span>
+    <span class="n">sc</span><span class="o">.</span><span class="n">Init</span><span class="p">()</span>
+    <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Mao fora do robo. ENTER para DEITAR (StandDown)... &quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;StandDown ret:&quot;</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">StandDown</span><span class="p">());</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;ENTER para LEVANTAR (StandUp)... &quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;StandUp   ret:&quot;</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">StandUp</span><span class="p">());</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;ENTER para equilibrio ativo (BalanceStand)... &quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Balance   ret:&quot;</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">BalanceStand</span><span class="p">());</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fim. Robo em pe, postura estavel.&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition success">
+<p class="admonition-title">✅ Teste de aceite — validado</p>
+<p><code>ret: 0</code> nas três ações e o robô obedecendo fisicamente (deitou → levantou → firmou).</p>
+</div>
+<div class="admonition danger">
+<p class="admonition-title">Checklist antes de QUALQUER script de movimento</p>
+<p>Robô em pé <strong>no chão</strong> (nunca em mesa), ~2×2 m livres, <strong>cabo ethernet com folga</strong> (ele abaixa e levanta!), controle ligado <strong>na mão</strong>, bateria ok, mãos fora do robô durante a execução.</p>
+</div>
+<h2 id="4-proximo-degrau-move-velocidade-continua-com-respeito">4. Próximo degrau: <code>Move()</code> — velocidade contínua, com respeito<a class="headerlink" href="#4-proximo-degrau-move-velocidade-continua-com-respeito" title="Permanent link">&para;</a></h2>
+<p><code>Move(vx, vy, vyaw)</code> comanda velocidades (m/s e rad/s). <strong>Segurança embutida que você precisa entender:</strong> cada <code>Move</code> vale por um curto intervalo — se o seu programa morrer, o robô <strong>para sozinho</strong> (watchdog). Consequência: andar contínuo = reenviar o comando periodicamente (~10 Hz); parar = <code>StopMove()</code>. Exercício opcional (área maior: 3–4 m livres à frente; robô em <code>BalanceStand</code> antes):</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">unitree_sdk2py.core.channel</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelFactoryInitialize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">unitree_sdk2py.go2.sport.sport_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SportClient</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">ChannelFactoryInitialize</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">sc</span> <span class="o">=</span> <span class="n">SportClient</span><span class="p">();</span> <span class="n">sc</span><span class="o">.</span><span class="n">SetTimeout</span><span class="p">(</span><span class="mf">10.0</span><span class="p">);</span> <span class="n">sc</span><span class="o">.</span><span class="n">Init</span><span class="p">()</span>
+    <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;3-4m livres a frente? Controle na mao? ENTER p/ andar 2s a 0.3 m/s... &quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span> <span class="o">&lt;</span> <span class="mf">2.0</span><span class="p">:</span>
+            <span class="n">sc</span><span class="o">.</span><span class="n">Move</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>   <span class="c1"># vx=0.3 m/s, reto</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>          <span class="c1"># reenvio a ~10 Hz</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">StopMove</span><span class="p">()</span>                <span class="c1"># SEMPRE, mesmo com Ctrl+C</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;StopMove enviado.&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>O <code>try/finally</code> garante o <code>StopMove()</code> até se você interromper no meio — grave esse padrão.</p>
+<h2 id="5-o-mapa-completo-ate-onde-vai-este-nivel">5. O mapa completo (até onde vai este nível)<a class="headerlink" href="#5-o-mapa-completo-ate-onde-vai-este-nivel" title="Permanent link">&para;</a></h2>
+<p>O que usamos é a <strong>API de alto nível</strong>: você pede intenções ("levanta", "anda a 0.3 m/s") e o controlador embarcado resolve as pernas. Existe o <strong>baixo nível</strong> (<code>/lowcmd</code> / <code>/lowstate</code>): comandar cada junta individualmente, torque a torque — é o terreno onde políticas de RL substituem o controlador de fábrica (exatamente o tema da palestra de quinta na summer school, "How Do You Teach a Robot to Walk?"). É poderoso e perigoso; fica mapeado como fronteira, não como exercício desta preparação.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Rodapé" >
+        
+          
+          <a href="../04-unitree-ros2/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Etapa 4 — unitree_ros2 ✔">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Etapa 4 — unitree_ros2 ✔
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../06-sensores/" class="md-footer__link md-footer__link--next" aria-label="Próximo: Etapa 6 — Sensores ✔">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Próximo
+              </span>
+              <div class="md-ellipsis">
+                Etapa 6 — Sensores ✔
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "navigation.sections", "navigation.top", "navigation.footer", "search.suggest", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
