@@ -55,14 +55,23 @@ Lendo o pipeline como uma linha de montagem: `udpsrc` escuta o grupo multicast n
 
 ## 4. Câmera — caminho B (validado): VideoClient do SDK, request/response
 
-O caminho que **funcionou** — e ainda entregou resolução maior: **1920×1080**, contra os 720p do stream. É o mesmo padrão request/response da [Etapa 5](05-sdk2.md), agora com carga binária, batendo no `rt/api/videohub/request` (o `/api/videohub/request` da [lista do Jetson](01-rede-go2.md)):
+O caminho que **funcionou** — e ainda entregou resolução maior: **1920×1080**, contra os 720p do stream (o serviço de requisição devolve a captura na resolução nativa; o stream multicast transmite a versão reduzida). É o padrão request/response da [Etapa 5](05-sdk2.md) com carga binária, batendo no `rt/api/videohub/request` (o `/api/videohub/request` da [lista do Jetson](01-rede-go2.md)).
 
-1. `client.Init()` cria o par publisher/subscriber em `rt/api/videohub/request` e `rt/api/videohub/response`;
-2. `GetImageSample()` monta uma `unitree_api/Request`: **id único da requisição** + **api_id** da função (descubra com `grep -rn "API_ID" /root/rima_ws/unitree_sdk2_python/unitree_sdk2py/go2/video/`) + `parameter` em JSON (vazio aqui);
-3. O serviço `videohub` no robô captura um frame na resolução nativa, comprime em **JPEG** e devolve numa `Response` cuja **carga binária são os bytes crus do JPEG**;
-4. O cliente casa a resposta pelo id e devolve `(code, data)` — `code 0` = sucesso.
+### A anatomia de um frame — o round-trip completo
 
-**Por que isso dribla a aresta do pub/sub:** no pub/sub, o assinante precisa do *schema rico* de cada mensagem — qualquer divergência de contrato quebra a desserialização. No envelope request/response, o contrato é simples e estável, e o frame viaja como **blob opaco** que só o `cv2.imdecode` interpreta. *Schema acoplado vs. envelope + payload opaco* — decisão clássica de projeto de sistemas distribuídos.
+1. **`ChannelFactoryInitialize(0, sys.argv[1])`** — cria o *participante DDS* global do processo: domínio `0`, amarrado à interface passada (`$IF_ROBO`). Tudo que o SDK abre depois (subscribers, clients) pendura nesse participante — por isso é sempre a primeira chamada.
+2. **`VideoClient()`** — reutiliza a mesma infraestrutura genérica de cliente do `SportClient` da Etapa 5; o que muda é o serviço-alvo (`videohub`) e a tabela de `api_id` (descubra-a: `grep -rn "API_ID" /root/rima_ws/unitree_sdk2_python/unitree_sdk2py/go2/video/`).
+3. **`SetTimeout(3.0)`** — o SLA da espera: quanto o cliente aguarda a `Response` antes de desistir e devolver `code ≠ 0`. Nosso loop trata isso com `sleep(0.5)` + `continue` — um *backoff* simples que evita martelar o serviço.
+4. **`Init()`** — abre o par de canais (`rt/api/videohub/request` para publicar pedidos, `rt/api/videohub/response` para receber respostas) e liga o mecanismo de **casamento por id**.
+5. **`GetImageSample()`** — um round-trip: monta a `unitree_api/Request` (cabeçalho com **id único** desta requisição + **api_id** da função; campos de lease/policy; `parameter` em JSON — vazio aqui), publica, e bloqueia até a resposta casada chegar. Do lado do robô, o `videohub` captura um frame da câmera, **comprime em JPEG** e devolve numa `Response`: cabeçalho ecoando o id + `code` de status + carga **binária** com os bytes crus do JPEG.
+6. **`bytes(data)` → `np.frombuffer(..., np.uint8)`** — transforma a sequência devolvida em bytes contíguos e cria uma *view* NumPy **sem cópia** sobre eles.
+7. **`cv2.imdecode(..., IMREAD_COLOR)`** — descomprime o JPEG num `ndarray` BGR. Devolve `None` se o JPEG vier corrompido — daí o guard `if img is None: continue`.
+8. **`img.shape == (1080, 1920, 3)`** — a assinatura da imagem: altura × largura × canais (BGR). O print único no primeiro frame é diagnóstico barato.
+9. **`cv2.imshow` + `cv2.waitKey(1)`** — desenha e **bombeia a fila de eventos** da janela (sem `waitKey`, janela congelada); `q` sai, `destroyAllWindows()` limpa.
+
+### Por que este caminho dribla a aresta do pub/sub
+
+No pub/sub, o assinante precisa do **schema rico** de cada mensagem — qualquer divergência de contrato quebra a desserialização (foi o que vimos no estudo de caso abaixo). No envelope request/response, o contrato é **simples e estável** (Request/Response genéricos), e o frame viaja como **blob opaco** que só o `cv2.imdecode` interpreta. *Schema acoplado vs. envelope + payload opaco* — uma decisão clássica de projeto de sistemas distribuídos, e você viveu os dois lados dela na mesma noite.
 
 ```python
 import sys, time
@@ -71,18 +80,18 @@ from unitree_sdk2py.core.channel import ChannelFactoryInitialize
 from unitree_sdk2py.go2.video.video_client import VideoClient
 
 if __name__ == "__main__":
-    ChannelFactoryInitialize(0, sys.argv[1])
+    ChannelFactoryInitialize(0, sys.argv[1])   # participante DDS: dominio 0 + IF_ROBO
     client = VideoClient()
-    client.SetTimeout(3.0)     # quanto esperar cada resposta
-    client.Init()
+    client.SetTimeout(3.0)                     # SLA de cada resposta
+    client.Init()                              # abre request/response + casamento por id
     print("Pedindo frames via VideoClient (q na janela sai)...")
     first = True
     while True:
-        code, data = client.GetImageSample()   # 1 round-trip = 1 frame
-        if code != 0:
+        code, data = client.GetImageSample()   # 1 round-trip = 1 frame JPEG
+        if code != 0:                          # timeout/erro do servico
             print("GetImageSample code:", code); time.sleep(0.5); continue
         img = cv2.imdecode(np.frombuffer(bytes(data), np.uint8), cv2.IMREAD_COLOR)
-        if img is None: continue
+        if img is None: continue               # JPEG corrompido: pula
         if first: print("primeiro frame:", img.shape); first = False
         cv2.imshow("Go2 - VideoClient (q sai)", img)
         if cv2.waitKey(1) & 0xFF == ord('q'): break
@@ -90,9 +99,11 @@ if __name__ == "__main__":
 ```
 
 !!! success "✅ Teste de aceite — validado"
-    `primeiro frame: (1080, 1920, 3)` + janela com o vídeo. Avisos `QFontDatabase: Cannot find font directory` são cosméticos (o Qt embutido no OpenCV do pip não traz fontes).
+    `primeiro frame: (1080, 1920, 3)` + janela com o vídeo. Avisos `QFontDatabase: Cannot find font directory` são cosméticos (o Qt embutido no OpenCV do pip não traz fontes); o traceback de `KeyboardInterrupt` no Ctrl+C é a saída normal.
 
-Características do caminho: taxa menor que o stream (um pedido-e-resposta por frame) e engasgos ocasionais em loop contínuo são comportamento relatado no ecossistema — em troca, código trivial e a imagem em resolução cheia.
+### Custo e uso certo de cada coisa
+
+Cada frame custa **um round-trip completo**: pedido pela rede + captura + compressão JPEG no robô + resposta + descompressão no notebook — por isso a taxa é menor que a do stream, e engasgos ocasionais em loop contínuo são comportamento relatado no ecossistema. O encaixe natural: **snapshots para visão computacional** (rodar um YOLO por frame, fotos periódicas, inspeção sob demanda). Para *vídeo contínuo* de assistir, o stream GStreamer segue melhor. Erros `code ≠ 0` persistentes: mesmo raciocínio do [ret ≠ 0 da Etapa 5](troubleshooting.md#ret-nao-zero).
 
 ## 4b. Estudo de caso — a aresta do `/frontvideostream` via rclpy
 

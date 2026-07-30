@@ -172,3 +172,20 @@ Todos os problemas abaixo **aconteceram de verdade** durante a preparação (30/
 **Diagnóstico (fechado em 30/07):** os erros vêm em rajada = **cada mensagem está chegando** e sendo rejeitada na desserialização — o `videohub` publica normalmente. Sanidade que isola o problema: `/sportmodestate`, do mesmo pacote `unitree_go`, desserializa perfeitamente → pilha e build corretos; a divergência é específica do `Go2FrontVideoData`. No Jetson, `ros2 interface show` responde `Unknown package` (o Foxy embarcado é baunilha; os tipos vivem embutidos nos binários dos serviços — o `topic list -t` só funciona porque o *nome* do tipo viaja na metadata de descoberta do DDS). Aresta conhecida no ecossistema (issue #102 do unitree_sdk2_python relata o mesmo quadro).
 
 **Solução:** usar os caminhos que funcionam — `VideoClient.GetImageSample()` (validado, 1080p) ou o stream GStreamer. Estudo de caso completo na [Etapa 6](06-sensores.md).
+
+## Zenoh: ros2 topic list vazio / nós não se veem {#zenoh-topic-vazio}
+
+**Checklist na ordem (do mais comum ao mais raro):**
+
+1. `echo $RMW_IMPLEMENTATION` **neste terminal** — vazio ou `fastrtps`? O export do trio sagrado foi esquecido (erro nº 1 do Zenoh; cada `docker exec` novo precisa dele).
+2. `pgrep -af rmw_zenohd` — router morto? Nós sem router ficam ilhados (diferente do DDS, nada se descobre sozinho).
+3. `echo $ROS_DOMAIN_ID` — igual nas duas pontas?
+4. Endpoint: o IP/porta no `ZENOH_CONFIG_OVERRIDE` está certo? (porta padrão 7447; teste `ping IP` antes).
+
+## export vs source: "not a valid identifier" {#export-vs-source}
+
+**Sintoma:** `export /opt/ros/kilted/setup.bash` → `bash: export: ... not a valid identifier`.
+
+**Causa:** confusão entre dois comandos de shell: **`export`** define *variáveis de ambiente* (`export NOME=valor`); **`source`** *executa um script* no shell atual (`source /caminho/script.bash`). Um caminho de arquivo não é um nome de variável válido — daí o erro.
+
+**Solução:** `source /opt/ros/kilted/setup.bash` (script) e `export RMW_IMPLEMENTATION=rmw_zenoh_cpp` (variável).

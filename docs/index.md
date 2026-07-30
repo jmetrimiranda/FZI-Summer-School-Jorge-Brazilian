@@ -22,12 +22,12 @@ Cada etapa termina com um bloco **✅ Teste de aceite**: rode e compare com a sa
 | 4 — unitree_ros2: o robô no `ros2 topic list` do notebook | ✔ 30/07 |
 | 5 — SDK2: mover o robô por código | ✔ 30/07 |
 | 6 — Sensores: LiDAR no RViz + câmera | ✔ 30/07 |
-| 7 — Zenoh (modo escola) | 🔜 próxima |
-| 8 — Internet no robô (NAT) | 🔜 |
+| 7 — Zenoh (modo escola) | ✔ 30/07 |
+| 8 — Internet no robô (NAT) | 🔜 próxima |
 | 9 — Firmware OTA + backup do Jetson | 🔜 |
 | 10 — Ensaio geral cronometrado + kit | 🔜 |
 
-**Progresso geral: ~75% do esforço técnico** — o robô é lido, comandado, e agora *visto*: nuvem do LiDAR no RViz e câmera por dois transportes. Restam: Zenoh e a logística final.
+**Progresso geral: ~85% — TODAS as etapas técnicas concluídas.** O notebook lê, comanda e vê o robô; o vocabulário do evento (Zenoh: router, client mode, trio sagrado) está validado. Resta a logística: NAT, firmware/backup, kit e ensaio geral.
 
 ## Ambiente de referência
 
